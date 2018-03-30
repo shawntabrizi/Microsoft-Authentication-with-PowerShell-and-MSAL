@@ -11,7 +11,8 @@ $login = "https://login.microsoftonline.com/"
 $tenantId = "common"
 $resourceId = "https://graph.microsoft.com"
 $redirectUri = New-Object system.uri("https://login.microsoftonline.com/common/oauth2/nativeclient")
-$scopes = "user.read"
+$scopes = New-Object System.Collections.ObjectModel.Collection["string"]
+$scopes.Add("user.read")
 
 # Get an Access Token with MSAL
 $app = New-Object Microsoft.Identity.Client.PublicClientApplication($clientId, ($login + $tenantId))

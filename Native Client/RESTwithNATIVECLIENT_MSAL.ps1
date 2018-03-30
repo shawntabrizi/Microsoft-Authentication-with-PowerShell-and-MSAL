@@ -1,4 +1,4 @@
-# Load ADAL
+# Load MSAL
 Add-Type -Path "..\MSAL\Microsoft.Identity.Client.dll"
 
 # Output Token and Response from Microsoft Graph

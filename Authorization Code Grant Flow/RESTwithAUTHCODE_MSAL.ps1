@@ -9,26 +9,23 @@ $accessToken = ".\Token.txt"
 $output = ".\Output.json"
 
 # Application and Tenant Configuration
-$clientId = "bfa0f990-6350-4750-8d0c-42d6a3cd49ea"
+$clientId = "<AppIdGUID>"
 $login = "https://login.microsoftonline.com/"
 $tenantId = "common"
-$redirectUri = "https://shawntabrizi.com/"
+$redirectUri = New-Object system.uri("<redirectURI>")
 
 # Create Client Credential Using App Key
-$secret = New-Object Microsoft.Identity.Client.ClientCredential("imbOKALAP7]nhzaS2868$)(")
-
-# Create Client Credential Using Certificate
-#$certFile = "<PFXFilePath>"
-#$certFilePassword = "<CertPassword>"
-#$secret = New-Object -TypeName System.Security.Cryptography.X509Certificates.X509Certificate -ArgumentList $certFile,$certFilePassword
+$secret = New-Object Microsoft.Identity.Client.ClientCredential("<secret>")
 
 # Define the resources and scopes you want to call
 $scopes = New-Object System.Collections.ObjectModel.Collection["string"]
 $scopes.Add("https://graph.microsoft.com/user.read")
 
 # Get an Access Token with MSAL
-$app = New-Object Microsoft.Identity.Client.ConfidentialClientApplication($clientId, ($login + $tenantId), $redirectUri, $secret)
-$authenticationResult = $app.AcquireTokenAsync($scopes).GetAwaiter().GetResult()
+$app = New-Object Microsoft.Identity.Client.ConfidentialClientApplication($clientId, ($login + $tenantId), $redirectUri, $secret, $null, $null)
+$authorzationUrl = $app.GetAuthorizationRequestUrlAsync($scopes, $null, $null).GetAwaiter().GetResult()
+$code = LoginBrowser $authorzationUrl $redirectUri
+$authenticationResult = $app.AcquireTokenByAuthorizationCodeAsync($code, $scopes).GetAwaiter().GetResult()
 
 ($token = $authenticationResult.AccessToken) | Out-File $accessToken
 
